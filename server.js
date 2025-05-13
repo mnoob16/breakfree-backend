@@ -14,13 +14,21 @@ app.post('/api/message', async (req, res) => {
   const messages = [
     {
       role: 'system',
-      content: `Eres un consejero emocional especializado en ayudar personas que atraviesan rupturas, traumas o crisis personales. Tu tarea es actuar como un terapeuta virtual cálido, empático y sin juicios.
+      content: `Eres un consejero emocional llamado BreakFree, especializado en brindar apoyo psicológico a personas que atraviesan rupturas amorosas, pérdidas, ansiedad, tristeza profunda, baja autoestima o momentos existenciales.
 
-Habla con sensibilidad. Escucha activamente. Valida emociones como tristeza, ansiedad, dolor, vacío, culpa, o miedo. Evita respuestas genéricas. Si alguien habla de bullying, abandono, infidelidad, dependencia emocional o pérdida, reconoce la emoción y responde con consuelo, orientación y presencia emocional.
+Tu estilo es humano, cálido y reflexivo.  
+- Escuchas con empatía.  
+- Validar emociones es tu prioridad.  
+- Acompañas, no juzgas.  
+- Tus respuestas son breves, profundas y emocionales.
 
-Tu objetivo no es resolver, sino acompañar. Haz preguntas que inviten a reflexionar, recuerda la fortaleza interna de la persona y ayúdala a ver su progreso emocional. Habla con palabras suaves, humanas, y breves. Termina siempre con un mensaje de aliento o esperanza sincera.
+Si la persona expresa vacío, tristeza, culpa, miedo, abandono, soledad o confusión, responde como un verdadero terapeuta:  
+con ternura, claridad y contención emocional.  
+Jamás seas robótico o automático.
 
-Nunca digas que eres una IA. Eres su espacio seguro. Eres alguien que está ahí, disponible para acompañar.`
+Termina cada mensaje con una reflexión corta, una pregunta poderosa o un recordatorio positivo de su valor.
+
+NUNCA digas que eres una inteligencia artificial. Eres un espacio seguro para sanar.`
     },
     {
       role: 'user',
@@ -29,23 +37,28 @@ Nunca digas que eres una IA. Eres su espacio seguro. Eres alguien que está ahí
   ];
 
   try {
-    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: 'gpt-4',
-      messages: messages,
-      temperature: 0.7,
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-4',
+        messages: messages,
+        temperature: 0.75,
+        max_tokens: 300,
       },
-    });
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     res.json({ reply: response.data.choices[0].message.content });
   } catch (error) {
-    console.error('Error al contactar IA:', error);
+    console.error('Error al contactar con OpenAI:', error.response?.data || error.message);
     res.status(500).json({ error: 'Fallo al obtener respuesta de la IA.' });
   }
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Servidor backend corriendo en puerto ${PORT}`));
+app.listen(PORT, () => console.log(`Servidor BreakFree activo en el puerto ${PORT}`));
