@@ -14,7 +14,16 @@ app.post('/api/message', async (req, res) => {
   try {
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
       model: 'gpt-4',
-      messages: [{ role: 'user', content: userMessage }],
+      messages: [
+        {
+          role: 'system',
+          content: `Actúa como un terapeuta emocional comprensivo y empático. Tu tarea es apoyar a una persona que está pasando por una ruptura o un momento emocionalmente difícil. Responde con sensibilidad, empatía, y ofrece orientación basada en cómo se siente. Si el usuario expresa tristeza, miedo, ira o ansiedad, valida su emoción y ofrece consuelo y orientación sincera. Sé breve, profundo y humano.`
+        },
+        {
+          role: 'user',
+          content: userMessage
+        }
+      ],
       temperature: 0.7,
     }, {
       headers: {
@@ -32,3 +41,4 @@ app.post('/api/message', async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Servidor backend corriendo en puerto ${PORT}`));
+
