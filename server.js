@@ -11,7 +11,6 @@ app.use(bodyParser.json());
 app.post('/api/message', async (req, res) => {
   const userMessage = req.body.message;
 
-  // Ignorar cualquier "system" enviado desde el frontend
   const messages = [
     {
       role: 'system',
@@ -48,4 +47,5 @@ Nunca digas que eres una IA. Eres su espacio seguro. Eres alguien que está ahí
   }
 });
 
-const PORT =
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Servidor backend corriendo en puerto ${PORT}`));
